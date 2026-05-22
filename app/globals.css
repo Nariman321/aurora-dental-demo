@@ -1,0 +1,258 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #f7faf9;
+  --color-bg-soft: #eef6f4;
+  --color-ink: #0b1726;
+  --color-ink-soft: #43526a;
+  --color-line: #e2ecea;
+  --color-mint: #b9f3e4;
+  --color-mint-soft: #e6faf3;
+  --color-teal: #0d9488;
+  --color-teal-deep: #0b6b62;
+  --color-teal-ink: #064e47;
+  --color-coral: #ff7a59;
+  --color-cream: #fff8ef;
+  --color-gold: #c4953b;
+
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-manrope);
+
+  --shadow-soft: 0 1px 2px rgba(11, 23, 38, 0.05),
+    0 8px 24px -12px rgba(11, 23, 38, 0.12);
+  --shadow-lift: 0 12px 40px -16px rgba(13, 148, 136, 0.35),
+    0 2px 6px rgba(11, 23, 38, 0.05);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  letter-spacing: -0.014em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--color-teal);
+  color: white;
+}
+
+/* Custom utilities */
+@utility container-x {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (min-width: 768px) {
+    padding-inline: 2rem;
+  }
+  @media (min-width: 1280px) {
+    padding-inline: 2.5rem;
+  }
+}
+
+@utility heading-display {
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+}
+
+@utility heading-bold {
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility gradient-mesh {
+  background:
+    radial-gradient(60% 60% at 18% 12%, rgba(13, 148, 136, 0.18), transparent 60%),
+    radial-gradient(50% 50% at 92% 18%, rgba(255, 122, 89, 0.12), transparent 60%),
+    radial-gradient(60% 60% at 82% 88%, rgba(185, 243, 228, 0.55), transparent 60%),
+    radial-gradient(40% 40% at 12% 92%, rgba(196, 149, 59, 0.12), transparent 60%);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Subtle grain on hero */
+@utility grain {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.04 0 0 0 0 0.09 0 0 0 0 0.15 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* Animated gradient line */
+@utility animated-underline {
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-teal) 30%,
+    var(--color-coral) 70%,
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 4s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-10px) rotate(-1deg); }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.85); opacity: 0.7; }
+  80%, 100% { transform: scale(1.6); opacity: 0; }
+}
+
+.float-slow { animation: float 7s ease-in-out infinite; }
+.float-slower { animation: float 11s ease-in-out infinite; }
+.pulse-ring { animation: pulse-ring 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+
+/* Marquee */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee { animation: marquee 38s linear infinite; }
+.marquee:hover { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Horizontal snap rail for mobile carousels — auto switches to grid on md+ */
+@utility snap-rail {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 1.25rem;
+  padding-inline: 1.25rem;
+  padding-bottom: 0.75rem;
+  margin-inline: -1.25rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+  & > * {
+    scroll-snap-align: start;
+    flex: 0 0 86%;
+    min-width: 0;
+  }
+  @media (min-width: 640px) {
+    & > * { flex: 0 0 60%; }
+  }
+  @media (min-width: 768px) {
+    display: grid;
+    overflow: visible;
+    padding: 0;
+    margin: 0;
+    & > * {
+      flex: initial;
+      scroll-snap-align: none;
+    }
+  }
+}
+
+@utility snap-rail-3 {
+  /* same as snap-rail but switches to 3-col grid on md+ */
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@utility snap-rail-2then3 {
+  /* 2 cols on md, 3 cols on lg */
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@utility snap-rail-4 {
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Tap-friendly minimum target */
+@utility tap-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Safe area helpers for iOS notch/home-indicator */
+@utility pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 0px);
+}
+@utility bottom-safe {
+  bottom: max(env(safe-area-inset-bottom, 0px), 0px);
+}
+
+/* Disable hover-only effects on touch devices */
+@media (hover: none) {
+  .hover\:-translate-y-1:hover,
+  .hover\:-translate-y-0\.5:hover,
+  .hover\:translate-x-0\.5:hover,
+  .hover\:scale-110:hover {
+    transform: none;
+  }
+}
+
+/* Native momentum scroll smoothing */
+.snap-rail-edge-fade {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 1.25rem,
+    #000 calc(100% - 1.25rem),
+    transparent 100%
+  );
+}
