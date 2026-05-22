@@ -26,13 +26,16 @@ npm run dev
 - `components/` — все секции лендинга
 - `public/` — статика
 
-## Деплой на Netlify
+## Деплой на Vercel
 
-Уже настроен `netlify.toml`. Подключи репозиторий в Netlify:
+1. Зайди на [vercel.com/new](https://vercel.com/new)
+2. Import Git Repository → выбери `aurora-dental-demo`
+3. Жми Deploy — никаких настроек не нужно
 
-1. New site → Import from GitHub
-2. Выбери репозиторий
-3. Настройки сборки определятся автоматически из `netlify.toml`
-4. Deploy
+Через ~1 минуту получишь URL вида `aurora-dental-demo.vercel.app`. Каждый push в `main` будет автоматически деплоиться, на каждый PR появится preview-ссылка.
 
-Команда сборки: `npm run build` · Publish dir: `.next` · Plugin: `@netlify/plugin-nextjs`
+## Альтернативы
+
+- **Cloudflare Pages** — безлимит трафика, нужен `@cloudflare/next-on-pages`
+- **Netlify** — добавь обратно `netlify.toml` с `[build] command = "npm run build"` и плагином `@netlify/plugin-nextjs`
+- **GitHub Pages** — только при `output: "export"` в `next.config.ts` (без SSR)
